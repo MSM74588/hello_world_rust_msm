@@ -25,4 +25,6 @@ fn main() {
         Ordering::Greater => println!("Too big!"),
         Ordering::Equal => println!("You win!"),
     };
+
+    println!("Secret Number was: {secret_number}");
 }
