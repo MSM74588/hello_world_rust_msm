@@ -221,4 +221,4 @@ it create a package called hello_cargo
 
 #### Now Looping it
 
-- `loop{}` will create an infinite loop 
+- `loop{}` will create an infinite loop , `break;`statement will break the loop
