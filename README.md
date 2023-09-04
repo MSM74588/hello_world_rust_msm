@@ -222,3 +222,18 @@ it create a package called hello_cargo
 #### Now Looping it
 
 - `loop{}` will create an infinite loop , `break;`statement will break the loop
+
+#### Now Handling Invalid input
+
+- currently the program just crashes
+
+- so we will handle error by 
+
+```rust
+let guess: u32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => continue,
+        };
+```
+
+- when it is ok. the result (named as num) is passed to Ok varient as parameter so the enum return the value, and on error, `(_)`the underscore is a <u>catchall</u> value. We are using a `match`, so on Ok match we will return the "Ok" and the value to <u>guess</u> and on error will run `continue`which tells the program to run the next iteration of the loop skipping the current. so on error it will skip the loop and will again start/next iterate, and wil ask for new value again.
