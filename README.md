@@ -237,3 +237,79 @@ let guess: u32 = match guess.trim().parse() {
 ```
 
 - when it is ok. the result (named as num) is passed to Ok varient as parameter so the enum return the value, and on error, `(_)`the underscore is a <u>catchall</u> value. We are using a `match`, so on Ok match we will return the "Ok" and the value to <u>guess</u> and on error will run `continue`which tells the program to run the next iteration of the loop skipping the current. so on error it will skip the loop and will again start/next iterate, and wil ask for new value again.
+
+### Stage 2: Common Programming Concepts
+
+-  Mutability: You cannot change the value of a var later by default. like
+  
+  ```rust
+  // # READ THE COMMENTS
+  
+  // ---
+  let variable = 1
+  println!("var is {varariable}")
+  // and then
+  variable = 2 // ❌
+  // This is not allowed! its not safe
+  // we NEED to declare the variable mutable
+  // ---
+  
+  // ---
+  // Correct way => added mut
+  let mut variable = 1
+  println!("var is {varariable}")
+  // and then
+  variable = 2
+  println!("var is {varariable}")
+  // note, we did not shadowed the previous variable, we just changed it
+  // to shadow it we have to use let
+  // ---
+  ```
+
+- Constants: `const`, its constant, mutability cannot be used
+  
+  - it can be used with expressions, example
+    
+    ```rust
+    const THREE_HOURS_IN_SECONDS: u32 = 60 * 60 * 3
+    ```
+  
+  - For constant: the naming convention is "UPPERCASE with UNDERSCORE in b/w" 
+  
+  - It can be easy to read, like instead of setting the valur to 10,800
+
+- Scopes: we can create scopes with `{}` inside a code/function
+
+- Shadowing + scope:
+  
+  ```rust
+  fn main() {
+      let x = 5;
+  
+      let x = x + 1;
+  
+      {
+          let x = x * 2;
+          println!("The value of x in the inner scope is: {x}");
+      }
+  
+      println!("The value of x is: {x}");
+  }
+  ```
+  
+  - The program first binds "x" to 5, then it create a new variable by `let x =`whuch overtakes the original value by adding 1 as instructed. inside the scope, it overtakes the modified x and then create a new x by multiplying it by 2. and it is valid inside that scope only, the shadowing in that scope ends.
+  
+  - Shadowing is different from making a variable `mut`, we will get a compiler error if we do not use `let` keyword
+  
+  - We can change the type of a variable with shadowing:
+    
+    ```rust
+        let spaces = "   ";
+        let spaces = spaces.len();
+        
+        // THis will give us an error as the types are different
+        // To correct this,  we must use shadowing
+        // or change the type by parsing it maybe.
+        let mut spaces = "   ";
+        spaces = spaces.len();
+    ```
