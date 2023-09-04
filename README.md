@@ -152,5 +152,73 @@ it create a package called hello_cargo
 - `let secret_number = rand::thread_rng().gen_range(1..=100);`
   
   - we import rand and its trait `Random Number Generator`= `rng`by `use rand::Rng`it is also known as "trait". now it is added to scope.
+    
+    - first we call `rand::thread_rng`function, that gives us the particular random number generator we are going to use (one that is local to current thread of execution and is seeded by the OS), the we call `gen_range`method on RNG, this is defined by `Rng`trait. we brought in scope with the `use rand::Rng`. The `gen_range`method takes a range expression as an argument and generates a random number in the <u>range</u>, the range exp we are using here is `1..=100`to request a number b/w 1 and 100
+
+#### Now comparing the guess to the Secret Number (by RNG)
+
+- now we will use another standard library, cmp (comparing)
+
+- ```rust
+  use std::cmp::Ordering;
+  ```
   
-  - first we call `rand::thread_rng`function, that gives us the particular random number generator we are going to use (one that is local to current thread of execution and is seeded by the OS), the we call `gen_range`method on RNG, this is defined by `Rng`trait. we brought in scope with the `use rand::Rng`. The `gen_range`method takes a range expression as an argument and generates a random number in the <u>range</u>, the range exp we are using here is `1..=100`to request a number b/w 1 and 100
+  - we are bringing a type called `std::cmp::Ordering` into scope from standard library. The `Ordering` type is another <u>enum</u> which has varient *Less, Greater and Equal* . These are the three outcomes that are possible when comparing two numbers (cmp)
+
+- ```rust
+  fn main() {
+      // --snip--
+  
+      println!("You guessed: {guess}");
+  
+      match guess.cmp(&secret_number) {
+          Ordering::Less => println!("Too small!"),
+          Ordering::Greater => println!("Too big!"),
+          Ordering::Equal => println!("You win!"),
+      }
+  }
+  ```
+  
+  - Now we will use the `match` expression, (function is also an expression btw), to use the `guess.cmp`method and pass the "secret_number" value which is referenced. Which is a enum, and will return the valur of secret_number, when matched with the specific one.
+  
+  - The `match` expression is made up of arms, each arm consists of a pattern to match agains, tust takes the value given to match and looks through each arms pattern in turn. Patterns and match construct are powerful rust features.
+  
+  - here, the cmp method will reuturn the matched enum return value, if the secret no is 38 and the guess is 50, it will **compare the guess to secret number** > `guess.cmp(&secret_number)`
+  
+  - and when matched with the enum return value, it will print that command
+  
+  ### But this will not compile yet.
+  
+  - The code has mismatched types. since we wrote `let mut guess = String::new()`rust was able to infer "Guess" should be a string, but secret number is a i32 (32 but number type) [u32 is unsigned 32 bit number, i64 is 64 but number], so there is cearly a mismatch type, so we need to read the input as real number instead of String (as its returned), so we need to convert it. [this is because the input is taken as raw string with the arguments]
+  
+  - convert by 
+    
+    ```rust
+    let mut guess = String::new();
+    
+        io::stdin()
+            .read_line(&mut guess)
+            .expect("Failed to read line");
+    
+        let guess: u32 = guess.trim().parse().expect("Please type a number!");
+    
+        println!("You guessed: {guess}");
+    
+        match guess.cmp(&secret_number) {
+            Ordering::Less => println!("Too small!"),
+            Ordering::Greater => println!("Too big!"),
+            Ordering::Equal => println!("You win!"),
+        }
+    ```
+  
+  - in which we after taking the input from i/o we the converted to u32, we shadowed the previous guess variable and reused the guess variable, shadowing lets us reuse the *guess* var rather than using two different unique var. Now we have converted the value
+    
+    - the `guess`referes to original var, the `trim`method on *String* instance will eliminate whitespace at the beginning and end, which is needed to comparison. as only numerical data is needed. We also added a `expect` so it will be able to handle unmatched type and handle the error.
+    
+    - the `parse`method on string, converts it to another type, here `u32`, u32 is good for small positive number.
+    
+    - the `parse` will only work on characted which can be logically cnverted to numbers, so it cal easily cause error, for example an emoji will not be converted to number and will retrun a `result`type that wll have the Err varient in this case
+
+#### Now Looping it
+
+- `loop{}` will create an infinite loop 
